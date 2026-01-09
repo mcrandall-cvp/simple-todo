@@ -1,7 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TasksService } from './tasks.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { InternalServerErrorException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 
 describe('TasksService', () => {
   let service: TasksService;
@@ -12,6 +15,7 @@ describe('TasksService', () => {
       aggregate: jest.fn(),
       create: jest.fn(),
       findMany: jest.fn(),
+      delete: jest.fn(),
     },
   };
 
@@ -136,6 +140,45 @@ describe('TasksService', () => {
       await service.create(createTaskDto);
 
       expect(mockPrismaService.$transaction).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('completeTask', () => {
+    const fixedDate = new Date('2026-01-09T06:00:00.000Z');
+    const mockTask = {
+      id: 1,
+      title: 'Test task',
+      position: 0,
+      createdAt: fixedDate,
+    };
+
+    it('should delete task and return void when task exists', async () => {
+      mockPrismaService.task.delete.mockResolvedValue(mockTask);
+
+      await service.completeTask(1);
+
+      expect(mockPrismaService.task.delete).toHaveBeenCalledWith({
+        where: { id: 1 },
+      });
+    });
+
+    it('should throw NotFoundException when task does not exist', async () => {
+      const prismaError = { code: 'P2025', message: 'Record not found' };
+      mockPrismaService.task.delete.mockRejectedValue(prismaError);
+
+      await expect(service.completeTask(999)).rejects.toThrow(NotFoundException);
+      expect(mockPrismaService.task.delete).toHaveBeenCalledWith({
+        where: { id: 999 },
+      });
+    });
+
+    it('should throw InternalServerErrorException on database error', async () => {
+      const dbError = new Error('Database connection failed');
+      mockPrismaService.task.delete.mockRejectedValue(dbError);
+
+      await expect(service.completeTask(1)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 });

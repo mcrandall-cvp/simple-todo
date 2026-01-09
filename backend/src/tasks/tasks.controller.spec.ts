@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TasksController } from './tasks.controller';
 import { TasksService } from './tasks.service';
+import { NotFoundException, InternalServerErrorException } from '@nestjs/common';
 
 describe('TasksController', () => {
   let controller: TasksController;
@@ -8,6 +9,7 @@ describe('TasksController', () => {
   const mockTasksService = {
     create: jest.fn(),
     findAll: jest.fn(),
+    completeTask: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -94,6 +96,39 @@ describe('TasksController', () => {
       mockTasksService.create.mockRejectedValue(error);
 
       await expect(controller.create(createTaskDto)).rejects.toThrow(error);
+    });
+  });
+
+  describe('complete', () => {
+    it('should call service.completeTask with parsed id', async () => {
+      mockTasksService.completeTask.mockResolvedValue(undefined);
+
+      await controller.complete(1);
+
+      expect(mockTasksService.completeTask).toHaveBeenCalledWith(1);
+    });
+
+    it('should return 204 No Content on success', async () => {
+      mockTasksService.completeTask.mockResolvedValue(undefined);
+
+      const result = await controller.complete(1);
+
+      expect(result).toBeUndefined();
+    });
+
+    it('should handle 404 when service throws NotFoundException', async () => {
+      mockTasksService.completeTask.mockRejectedValue(
+        new NotFoundException('Task not found'),
+      );
+
+      await expect(controller.complete(999)).rejects.toThrow(NotFoundException);
+    });
+
+    it('should propagate InternalServerErrorException from service', async () => {
+      const error = new InternalServerErrorException('Failed to complete task');
+      mockTasksService.completeTask.mockRejectedValue(error);
+
+      await expect(controller.complete(1)).rejects.toThrow(InternalServerErrorException);
     });
   });
 });
