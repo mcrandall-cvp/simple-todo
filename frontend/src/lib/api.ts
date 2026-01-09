@@ -15,7 +15,7 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
       if (i < attempts - 1) {
-        // Exponential backoff: 1s, 2s, 3s
+        // Linear backoff: 1s, 2s, 3s
         await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
       }
     }

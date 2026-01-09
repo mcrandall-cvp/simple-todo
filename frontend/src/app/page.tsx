@@ -28,7 +28,7 @@ export default function Home() {
   const handleAddTask = async (title: string) => {
     // Optimistic update - create temporary task
     const tempTask: Task = {
-      id: Date.now(), // Temporary ID
+      id: -Math.random(), // Negative random ID to avoid collisions
       title,
       position: tasks.length,
       createdAt: new Date().toISOString(),
