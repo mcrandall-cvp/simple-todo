@@ -7,7 +7,7 @@ describe('TaskItem', () => {
     id: 1,
     title: 'Test Task',
     position: 0,
-    createdAt: new Date('2026-01-09T12:00:00Z'),
+    createdAt: '2026-01-09T12:00:00Z',
   };
 
   it('renders task title', () => {
