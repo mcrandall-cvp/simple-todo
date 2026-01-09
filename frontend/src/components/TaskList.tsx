@@ -19,7 +19,7 @@ export default function TaskList({ tasks, onComplete }: TaskListProps) {
         <TaskItem
           key={task.id}
           task={task}
-          onComplete={onComplete ? () => onComplete(task.id) : undefined}
+          onComplete={onComplete}
         />
       ))}
     </ul>

@@ -4,7 +4,7 @@ import { Task } from "@/lib/types";
 
 interface TaskItemProps {
   task: Task;
-  onComplete?: () => void; // Optional - will be used in Epic 3
+  onComplete?: (id: number) => void; // Optional - will be used in Epic 3
 }
 
 export default function TaskItem({ task }: TaskItemProps) {
