@@ -18,14 +18,51 @@ When starting `/bmad:dev-story`:
 
 1. Check current branch: `git status`
 2. Create feature branch: `git checkout -b feature/story-{ID}-{description}`
-3. Implement the story
-4. Commit to feature branch (never to main directly)
+3. Write failing tests for the story requirements (RED)
+4. Implement minimal code to pass tests (GREEN)
+5. Refactor while keeping tests green (REFACTOR)
+6. Commit to feature branch (never to main directly)
 
 ### Commit Message Format
 
 ```
 story-{ID}: Brief description of change
 ```
+
+## Test-Driven Development (TDD)
+
+**IMPORTANT:** TDD is MANDATORY for all story implementations. Tests MUST be written BEFORE implementation code.
+
+### TDD Workflow (Red-Green-Refactor)
+
+For every story, follow this cycle:
+
+1. **RED** - Write a failing test first
+   - Write tests that define the expected behavior
+   - Run tests to confirm they fail (no implementation yet)
+
+2. **GREEN** - Write minimal code to pass the test
+   - Implement only enough code to make the test pass
+   - Do not add extra functionality
+
+3. **REFACTOR** - Improve the code while keeping tests green
+   - Clean up code, remove duplication
+   - Ensure all tests still pass
+
+### TDD Requirements
+
+- All new features MUST have tests written before implementation
+- PRs without adequate test coverage will NOT be accepted
+- Test files should be co-located or in a `__tests__` directory
+- Aim for meaningful tests that cover behavior, not just line coverage
+
+### Test Coverage Requirement
+
+**IMPORTANT:** Test coverage MUST be 85% or greater for all PRs.
+
+- Run coverage reports before submitting PRs: `npm run test:coverage`
+- PRs with coverage below 85% will NOT be accepted
+- Coverage applies to: statements, branches, functions, and lines
 
 ## Pull Request Guidelines
 
