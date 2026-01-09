@@ -8,19 +8,19 @@ describe('TaskList', () => {
       id: 1,
       title: 'Task 1',
       position: 0,
-      createdAt: new Date('2026-01-09T12:00:00Z'),
+      createdAt: '2026-01-09T12:00:00Z',
     },
     {
       id: 2,
       title: 'Task 2',
       position: 1,
-      createdAt: new Date('2026-01-09T12:01:00Z'),
+      createdAt: '2026-01-09T12:01:00Z',
     },
     {
       id: 3,
       title: 'Task 3',
       position: 2,
-      createdAt: new Date('2026-01-09T12:02:00Z'),
+      createdAt: '2026-01-09T12:02:00Z',
     },
   ];
 
