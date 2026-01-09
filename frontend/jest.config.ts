@@ -17,7 +17,6 @@ const config: Config = {
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
     '!src/app/layout.tsx',
-    '!src/app/page.tsx',
     '!src/lib/types.ts',
   ],
   coverageThreshold: {
