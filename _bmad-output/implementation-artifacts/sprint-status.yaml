@@ -52,7 +52,7 @@ development_status:
   2-1-create-task-api-endpoint: done
   2-2-get-tasks-api-endpoint: done
   2-3-taskinput-component: done
-  2-4-tasklist-and-taskitem-components: backlog
+  2-4-tasklist-and-taskitem-components: done
   2-5-emptystate-component: backlog
   2-6-full-stack-integration: backlog
   epic-2-retrospective: optional
