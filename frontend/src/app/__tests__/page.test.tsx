@@ -79,6 +79,8 @@ describe("Home Page", () => {
       await waitFor(() => {
         const items = screen.getAllByRole("listitem");
         expect(items).toHaveLength(2);
+        expect(items[0]).toHaveTextContent("Second task");
+        expect(items[1]).toHaveTextContent("First task");
       });
     });
   });
@@ -204,6 +206,8 @@ describe("Home Page", () => {
       await waitFor(() => {
         const items = screen.getAllByRole("listitem");
         expect(items).toHaveLength(2);
+        expect(items[0]).toHaveTextContent("Existing task");
+        expect(items[1]).toHaveTextContent("New task");
       });
     });
   });
@@ -285,8 +289,11 @@ describe("Home Page", () => {
       });
 
       // Check for main container with expected classes
-      const main = screen.getByRole("main");
-      expect(main).toBeInTheDocument();
+      const mainContainer = screen.getByTestId("main-container");
+      expect(mainContainer).toHaveClass("min-h-screen", "bg-white");
+
+      const wrapper = mainContainer.querySelector("div");
+      expect(wrapper).toHaveClass("w-full", "max-w-[512px]", "mx-auto", "px-4", "py-8", "flex", "flex-col", "min-h-screen");
     });
 
     it("should always display TaskInput at bottom", async () => {

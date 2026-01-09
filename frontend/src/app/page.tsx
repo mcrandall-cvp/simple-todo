@@ -12,16 +12,24 @@ export default function Home() {
 
   // Fetch tasks on mount
   useEffect(() => {
+    let isMounted = true;
     const loadTasks = async () => {
       try {
         const data = await fetchTasks();
-        setTasks(data);
+        if (isMounted) {
+          setTasks(data);
+        }
       } catch {
         // Silent error handling - log to console only
-        console.error("Failed to fetch tasks");
+        if (isMounted) {
+          console.error("Failed to fetch tasks");
+        }
       }
     };
     loadTasks();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Handle adding a new task with optimistic update

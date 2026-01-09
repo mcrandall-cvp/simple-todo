@@ -80,7 +80,7 @@ So that **I can trust my tasks are saved and won't be lost** (FR6, FR9).
 ## Dev Notes
 
 ### Technology Stack
-- **Next.js Version:** 16.1.1+ with App Router
+- **Next.js Version:** 14.x (using latest) with App Router
 - **TypeScript:** Strict mode enabled
 - **Tailwind CSS:** Latest (NO component libraries)
 - **React:** Functional components with TypeScript

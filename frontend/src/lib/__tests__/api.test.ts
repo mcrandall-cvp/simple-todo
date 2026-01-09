@@ -161,19 +161,31 @@ describe("API Client", () => {
 
   describe("API_BASE configuration", () => {
     it("should use NEXT_PUBLIC_API_URL when set", async () => {
-      // This test verifies the API base URL is configurable
+      // Set environment variable and reset modules to pick up change
+      const originalEnv = process.env.NEXT_PUBLIC_API_URL;
+      process.env.NEXT_PUBLIC_API_URL = "http://test-api.com";
+
+      jest.resetModules();
+      mockFetch.mockClear();
+
+      const { fetchTasks: fetchTasksWithEnv } = await import("../api");
+
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve([]),
       });
 
-      await fetchTasks();
+      await fetchTasksWithEnv();
 
-      // Should call the configured API URL
+      // Should call with the custom API URL
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringMatching(/\/tasks$/),
-        expect.anything()
+        "http://test-api.com/tasks",
+        expect.objectContaining({ method: "GET" })
       );
+
+      // Restore original environment
+      process.env.NEXT_PUBLIC_API_URL = originalEnv;
+      jest.resetModules();
     });
   });
 });
