@@ -66,8 +66,8 @@ Skip comments when:
 ## Review Checklist
 
 Before committing fixes:
-- [ ] All tests pass (`pio test -e native`)
-- [ ] Build succeeds (`pio run -e esp32-c3`)
+- [ ] All tests pass
+- [ ] Build succeeds
 - [ ] Changes match the issue being fixed
 - [ ] No unrelated changes included
 - [ ] Commit message references the issue
