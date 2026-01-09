@@ -1,0 +1,99 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { TasksController } from './tasks.controller';
+import { TasksService } from './tasks.service';
+
+describe('TasksController', () => {
+  let controller: TasksController;
+
+  const mockTasksService = {
+    create: jest.fn(),
+    findAll: jest.fn(),
+  };
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [TasksController],
+      providers: [
+        {
+          provide: TasksService,
+          useValue: mockTasksService,
+        },
+      ],
+    }).compile();
+
+    controller = module.get<TasksController>(TasksController);
+
+    jest.clearAllMocks();
+  });
+
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
+
+  describe('findAll', () => {
+    const fixedDate = new Date('2026-01-09T06:00:00.000Z');
+    const mockTasks = [
+      { id: 1, title: 'Task A', position: 0, createdAt: fixedDate },
+      { id: 2, title: 'Task B', position: 1, createdAt: fixedDate },
+    ];
+
+    it('should return tasks from service', async () => {
+      mockTasksService.findAll.mockResolvedValue(mockTasks);
+
+      const result = await controller.findAll();
+
+      expect(result).toEqual(mockTasks);
+      expect(mockTasksService.findAll).toHaveBeenCalledWith();
+    });
+
+    it('should return empty array when no tasks exist', async () => {
+      mockTasksService.findAll.mockResolvedValue([]);
+
+      const result = await controller.findAll();
+
+      expect(result).toEqual([]);
+    });
+
+    it('should propagate service errors', async () => {
+      const error = new Error('Service error');
+      mockTasksService.findAll.mockRejectedValue(error);
+
+      await expect(controller.findAll()).rejects.toThrow(error);
+    });
+  });
+
+  describe('create', () => {
+    const fixedDate = new Date('2026-01-09T06:00:00.000Z');
+    const createTaskDto = { title: 'Test task' };
+    const mockTask = {
+      id: 1,
+      title: 'Test task',
+      position: 0,
+      createdAt: fixedDate,
+    };
+
+    it('should create a task and return it', async () => {
+      mockTasksService.create.mockResolvedValue(mockTask);
+
+      const result = await controller.create(createTaskDto);
+
+      expect(result).toEqual(mockTask);
+      expect(mockTasksService.create).toHaveBeenCalledWith(createTaskDto);
+    });
+
+    it('should pass the DTO to the service', async () => {
+      mockTasksService.create.mockResolvedValue(mockTask);
+
+      await controller.create(createTaskDto);
+
+      expect(mockTasksService.create).toHaveBeenCalledWith(createTaskDto);
+    });
+
+    it('should propagate service errors', async () => {
+      const error = new Error('Service error');
+      mockTasksService.create.mockRejectedValue(error);
+
+      await expect(controller.create(createTaskDto)).rejects.toThrow(error);
+    });
+  });
+});
