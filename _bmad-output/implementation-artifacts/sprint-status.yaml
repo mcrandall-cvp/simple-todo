@@ -59,7 +59,7 @@ development_status:
 
   # Epic 3: Task Completion & Persistence
   epic-3: in-progress
-  3-1-complete-task-api-endpoint: review
+  3-1-complete-task-api-endpoint: done
   3-2-task-completion-ui: backlog
   3-3-data-persistence-verification: backlog
   epic-3-retrospective: optional
