@@ -4,6 +4,7 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from '@prisma/client';
@@ -54,8 +55,7 @@ export class TasksService {
         where: { id },
       });
     } catch (error) {
-      const prismaError = error as { code?: string };
-      if (prismaError?.code === 'P2025') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
         throw new NotFoundException(`Task with ID ${id} not found`);
       }
       this.logger.error(`Failed to complete task ${id}`, error);

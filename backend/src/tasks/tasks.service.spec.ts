@@ -5,6 +5,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 
 describe('TasksService', () => {
   let service: TasksService;
@@ -163,7 +164,10 @@ describe('TasksService', () => {
     });
 
     it('should throw NotFoundException when task does not exist', async () => {
-      const prismaError = { code: 'P2025', message: 'Record not found' };
+      const prismaError = new Prisma.PrismaClientKnownRequestError('Record not found', {
+        code: 'P2025',
+        clientVersion: '5.0.0',
+      });
       mockPrismaService.task.delete.mockRejectedValue(prismaError);
 
       await expect(service.completeTask(999)).rejects.toThrow(NotFoundException);
