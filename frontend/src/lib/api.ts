@@ -4,7 +4,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://backend:3001";
 
 /**
  * Retry wrapper for API calls - implements silent retry pattern
- * Retries up to 3 times with exponential backoff
+ * Retries up to 3 times with linear backoff
  * On final failure, throws error (caller handles rollback)
  */
 async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {

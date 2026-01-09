@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Task } from "@/lib/types";
 import { fetchTasks, createTask } from "@/lib/api";
 import TaskList from "@/components/TaskList";
@@ -9,6 +9,7 @@ import EmptyState from "@/components/EmptyState";
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const tempIdCounter = useRef(0);
 
   // Fetch tasks on mount
   useEffect(() => {
@@ -34,9 +35,9 @@ export default function Home() {
 
   // Handle adding a new task with optimistic update
   const handleAddTask = async (title: string) => {
-    // Optimistic update - create temporary task
+    // Optimistic update - create temporary task with unique ID
     const tempTask: Task = {
-      id: -Math.random(), // Negative random ID to avoid collisions
+      id: --tempIdCounter.current, // Use decrementing counter for guaranteed unique negative IDs
       title,
       position: tasks.length,
       createdAt: new Date().toISOString(),
