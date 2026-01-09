@@ -1,4 +1,10 @@
-import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from '@prisma/client';
@@ -40,6 +46,20 @@ export class TasksService {
     } catch (error) {
       this.logger.error('Failed to create task', error);
       throw new InternalServerErrorException('Failed to create task');
+    }
+  }
+
+  async completeTask(id: number): Promise<void> {
+    try {
+      await this.prisma.task.delete({
+        where: { id },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new NotFoundException(`Task with ID ${id} not found`);
+      }
+      this.logger.error(`Failed to complete task ${id}`, error);
+      throw new InternalServerErrorException('Failed to complete task');
     }
   }
 }

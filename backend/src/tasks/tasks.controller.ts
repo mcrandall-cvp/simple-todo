@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Patch,
+  Param,
+  ParseIntPipe,
+  HttpCode,
+} from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from '@prisma/client';
@@ -15,5 +24,11 @@ export class TasksController {
   @Post()
   async create(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
     return await this.tasksService.create(createTaskDto);
+  }
+
+  @Patch(':id/complete')
+  @HttpCode(204)
+  async complete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return await this.tasksService.completeTask(id);
   }
 }
