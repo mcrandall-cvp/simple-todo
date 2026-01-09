@@ -48,13 +48,13 @@ development_status:
   epic-1-retrospective: done
 
   # Epic 2: Task Capture & Display
-  epic-2: in-progress
+  epic-2: done
   2-1-create-task-api-endpoint: done
   2-2-get-tasks-api-endpoint: done
   2-3-taskinput-component: done
   2-4-tasklist-and-taskitem-components: done
   2-5-emptystate-component: done
-  2-6-full-stack-integration: backlog
+  2-6-full-stack-integration: done
   epic-2-retrospective: optional
 
   # Epic 3: Task Completion & Persistence
