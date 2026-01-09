@@ -29,6 +29,6 @@ export class TasksController {
   @Patch(':id/complete')
   @HttpCode(204)
   async complete(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.tasksService.completeTask(id);
+    return await this.tasksService.completeTask(id);
   }
 }

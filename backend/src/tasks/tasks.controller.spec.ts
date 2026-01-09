@@ -130,5 +130,15 @@ describe('TasksController', () => {
 
       await expect(controller.complete(1)).rejects.toThrow(InternalServerErrorException);
     });
+
+    it('should properly handle the promise chain', async () => {
+      mockTasksService.completeTask.mockResolvedValue(undefined);
+
+      const promise = controller.complete(5);
+
+      expect(promise).toBeInstanceOf(Promise);
+      await promise;
+      expect(mockTasksService.completeTask).toHaveBeenCalledWith(5);
+    });
   });
 });
